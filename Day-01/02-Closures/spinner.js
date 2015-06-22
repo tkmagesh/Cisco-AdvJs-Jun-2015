@@ -1,9 +1,22 @@
 create an object and assign it to a variable "spinner"
 the object is expected to exhibit the following methods
 
-var spinner = {
-    name : 'spinner'
+
+function getSpinner(){
+    var count = 0;
+    function increment(){
+        return ++count;
+    }
+    function decrement(){
+        return --count;
+    }
+    return {
+        up : increment,
+        down : decrement
+    }
 }
+
+var spinner = getSpinner();
 
 spinner.up() //=> 1
 spinner.up() //=> 2
