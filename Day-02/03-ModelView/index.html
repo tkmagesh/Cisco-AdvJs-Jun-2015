@@ -40,12 +40,19 @@
     //View
     $(document).ready(function(){
         var calculator = new SalaryCalculator();
-        $("#btnCalculate").click(function(){
+        $("#txtBasic").change(function(){
             calculator.basic = $("#txtBasic").val().toInt();
+        });
+        $("#txtHra").change(function(){
             calculator.hra = $("#txtHra").val().toInt();
+        });
+        $("#txtDa").change(function(){
             calculator.da = $("#txtDa").val().toInt();
+        });
+        $("#rangeTax").change(function(){
             calculator.tax = $("#rangeTax").val().toInt();
-
+        });
+        $("#btnCalculate").click(function(){
             calculator.calculate();
 
             $("#divResult").html(calculator.salary);
