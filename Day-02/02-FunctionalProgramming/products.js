@@ -1,10 +1,10 @@
 var products = [
-    {id : 5, name : "Pen", cost : 50, units : 60, category : 2},
-    {id : 9, name : "Hen", cost : 90, units : 40, category : 1},
-    {id : 7, name : "Den", cost : 40, units : 70, category : 2},
-    {id : 3, name : "Zen", cost : 60, units : 80, category : 1},
-    {id : 8, name : "Ken", cost : 70, units : 50, category : 2},
-    {id : 2, name : "Ten", cost : 20, units : 30, category : 1},
+    {id : 5, name : "Pen", cost : 50, units : 60, category : "C2"},
+    {id : 9, name : "Hen", cost : 90, units : 40, category : "C1"},
+    {id : 7, name : "Den", cost : 40, units : 70, category : "C2"},
+    {id : 3, name : "Zen", cost : 60, units : 80, category : "C1"},
+    {id : 8, name : "Ken", cost : 70, units : 50, category : "C2"},
+    {id : 2, name : "Ten", cost : 20, units : 30, category : "C1"},
 ]
 
 function describe(title, fn){
@@ -228,6 +228,32 @@ describe("Aggregate", function(){
         return result + product.units;
     }, 0);
     console.log("Sum of units = ", sumOfUnits);
+});
+
+describe("GroupBy", function(){
+    function groupBy(list, keySelector){
+        var result = {};
+        for(var i=0; i<list.length; i++){
+            var key = keySelector(list[i]);
+            result[key] = result[key] || [];
+            result[key].push(list[i]);
+        }
+        return result;
+    }
+    var categoryKeySelector = function(product){
+        return product.category;
+    };
+    window.productsByCategory = groupBy(products, categoryKeySelector);
+    console.log("Products By Category");
+    console.dir(window.productsByCategory);
+
+    var costKeySelector = function(product){
+        return product.cost > 50 ? "costly" : "affordable";
+    }
+    window.productsByCost = groupBy(products,costKeySelector);
+    console.log("Products By Cost");
+    console.dir(window.productsByCost);
+
 });
 
 /*
