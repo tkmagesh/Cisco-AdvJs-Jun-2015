@@ -55,13 +55,33 @@ describe("Sort", function(){
         });
     });
     describe("Sorting by any logic", function(){
-        function Sort(){
-            //fill in the blanks
+        //1 -> left > right
+        //0 -> left == right
+        //-1 -> left < right
+        function Sort(list, comparerFn){
+            for(var i=0; i<products.length-1; i++)
+                for(var j=i + 1; j<products.length; j++){
+                    var left = products[i],
+                        right = products[j];
+                        var compareResult = comparerFn(left, right);
+                    if (compareResult > 0){
+                        products[i] = products[j];
+                        products[j] = left;
+                    }
+                }
 
         }
         describe("by value [cost * units]", function(){
-
-        })
+            function compareProductsByValue (left, right){
+                var leftValue = left.cost * left.units,
+                    rightValue = right.cost * right.units;
+                if (leftValue < rightValue) return -1;
+                if (leftValue === rightValue) return 0;
+                return 1;
+            }
+            Sort(products, compareProductsByValue);
+            console.table(products);
+        });
     })
 });
 
