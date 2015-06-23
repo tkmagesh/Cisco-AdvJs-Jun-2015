@@ -133,6 +133,103 @@ describe("Filter", function(){
    });
 });
 
+describe("All", function(){
+    function all(list, predicate){
+        for(var i=0; i<list.length; i++)
+            if (!predicate(list[i])) return false;
+        return true;
+    }
+    describe("Are all the products costly?", function(){
+        var costlyProductPredicate = function(product){
+            return product.cost > 50;
+        }
+        console.log(all(products,costlyProductPredicate));
+    });
+});
+
+describe("Any", function(){
+    function any(list, predicate){
+        for(var i=0; i<list.length; i++)
+            if (predicate(list[i])) return true;
+        return false;
+    }
+    describe("Are there at least one costly product?", function(){
+        var costlyProductPredicate = function(product){
+            return product.cost > 50;
+        }
+        console.log(any(products,costlyProductPredicate));
+    });
+});
+
+describe("forEach", function(){
+    function forEach(list, action){
+        for(var i=0; i<list.length; i++)
+            action(list[i]);
+    }
+    forEach(products, function(product){
+        product["value"] = product.cost * product.units;
+    });
+    console.table(products);
+});
+
+describe("map", function(){
+    function map(list, action){
+        var result = [];
+        for(var i=0; i<list.length; i++)
+            result.push(action(list[i]));
+        return result;
+    }
+    var newItems = map(products, function(product){
+        return {
+            name : product.name,
+            value : product.value * 0.9
+        }
+    });
+    console.table(newItems);
+});
+
+describe("Min", function(){
+    function min(list, valueSelector, seed){
+        var result = seed;
+        for(var i=0; i<list.length; i++){
+            var value = valueSelector(list[i]);
+            if (value < result) result = value;
+        }
+        return result;
+    }
+
+    var minCost = min(products, function(p){ return p.cost; }, Number.MAX_VALUE);
+    console.log("Min cost = ", minCost);
+});
+
+describe("Max", function(){
+    function max(list, valueSelector, seed){
+        var result = seed;
+        for(var i=0; i<list.length; i++){
+            var value = valueSelector(list[i]);
+            if (value > result) result = value;
+        }
+        return result;
+    }
+
+    var maxCost = max(products, function(p){ return p.cost; }, Number.MIN_VALUE);
+    console.log("Max cost = ", maxCost);
+});
+
+describe("Aggregate", function(){
+    function aggregate(list, iterator, seed){
+        var result = seed;
+        for(var i=0; i< list.length; i++)
+            result = iterator(result, list[i]);
+        return result;
+    }
+
+    var sumOfUnits = aggregate(products, function(result, product){
+        return result + product.units;
+    }, 0);
+    console.log("Sum of units = ", sumOfUnits);
+});
+
 /*
 Sort
 Filter
