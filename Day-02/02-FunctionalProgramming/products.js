@@ -85,6 +85,53 @@ describe("Sort", function(){
     })
 });
 
+describe("Filter", function(){
+   function filter(list, predicate){
+       var result = [];
+       for(var i=0; i<list.length; i++){
+           var item = list[i];
+           if (predicate(item))
+               result.push(item);
+       }
+       return result;
+   }
+
+    function negate(predicate){
+       return function(){
+           return !predicate.apply(this,arguments);
+       };
+   }
+
+    var costlyProductPredicate = function(product){
+       return product.cost > 50;
+   };
+   var affordableProductPredicate = negate(costlyProductPredicate);
+
+
+   var category1ProductPredicate = function(product){
+       return product.category === 1;
+   };
+   var noncategory1ProductPredicate = negate(category1ProductPredicate);
+
+   describe("By Costly Products [cost > 50]", function(){
+       var costlyProducts = filter(products,costlyProductPredicate);
+       console.table(costlyProducts);
+   });
+   describe("By Affordable Products [cost <= 50]", function(){
+       var affordableProducts = filter(products,affordableProductPredicate);
+       console.table(affordableProducts);
+   });
+   describe("By Category [category == 1]", function(){
+
+       var category1Products = filter(products,category1ProductPredicate);
+       console.table(category1Products);
+   });
+   describe("By Non Category [category != 1]", function(){
+
+       var noncategory1Products = filter(products,noncategory1ProductPredicate);
+       console.table(noncategory1Products);
+   });
+});
 
 /*
 Sort
