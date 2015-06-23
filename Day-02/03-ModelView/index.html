@@ -30,16 +30,26 @@
         this.da = 0;
         this.tax = 0;
         this.salary = 0;
+
+        this.onSalaryChange = null;
     }
     SalaryCalculator.prototype.calculate = function(){
         var gross = this.basic + this.hra + this.da;
         var net = gross * ((100-this.tax)/100);
         this.salary = net;
+        if (typeof this.onSalaryChange === "function")
+            this.onSalaryChange();
     }
 
     //View
     $(document).ready(function(){
-        var calculator = new SalaryCalculator();
+        window.calculator = new SalaryCalculator();
+
+        calculator.onSalaryChange = function(){
+            $("#divResult").html(calculator.salary);
+        }
+
+
         $("#txtBasic").change(function(){
             calculator.basic = $("#txtBasic").val().toInt();
         });
@@ -54,8 +64,6 @@
         });
         $("#btnCalculate").click(function(){
             calculator.calculate();
-
-            $("#divResult").html(calculator.salary);
         });
         $("#rangeTax").change(function(){
             $("#spanTax").html(this.value);
